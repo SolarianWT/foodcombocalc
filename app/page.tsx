@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 import React, { useEffect, useState } from "react";
 import { Item, ComboItem, Combo } from "../classes";
 import baseList from "../data/baseList.json";
@@ -257,24 +257,24 @@ export default function Home() {
   }
 
   return (
-    <main className="p-8">
-      <div className="flex gap-6">
-        <aside className="w-[26rem] max-h-[90vh] min-h-[24rem] h-[36rem] overflow-auto border p-3 rounded">
+    <main className="p-4 md:p-8 min-h-screen">
+      <div className="flex flex-col md:flex-row gap-6 items-start">
+        <aside className="w-full md:w-[26rem] max-h-[70vh] md:max-h-[90vh] h-auto overflow-auto card">
           <div className="mb-3 flex gap-2 items-center">
-            <label className="px-2 py-1 border rounded cursor-pointer bg-white">
+            <label className="btn btn-ghost cursor-pointer">
               Import list
               <input type="file" accept="application/json" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) importFile(f); }} />
             </label>
-            <button className="px-2 py-1 border rounded" onClick={createList}>Add list</button>
+            <button className="btn btn-ghost" onClick={createList}>Add list</button>
           </div>
           <ul className="space-y-2">
             {lists.map((l, idx) => (
-              <li key={l.filename} className={`p-2 border rounded flex items-center justify-between break-words ${selectedList === l.filename ? 'bg-slate-100' : ''}`}>
-                <div className="flex-1">
-                  <div className="font-semibold cursor-pointer" onClick={() => selectList(l.filename)}>{l.displayName}</div>
+              <li key={l.filename} className={`flex flex-col md:flex-row items-start md:items-center justify-between gap-2 ${selectedList === l.filename ? 'bg-blue-50' : ''}`}>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold truncate cursor-pointer" onClick={() => selectList(l.filename)}>{l.displayName}</div>
                 </div>
-                <div className="flex gap-1">
-                  <button title="rename" className="px-2 py-1 border rounded" onClick={async () => {
+                <div className="flex gap-1 mt-2 md:mt-0 flex-wrap md:flex-nowrap">
+                  <button title="rename" className="btn btn-ghost px-2 py-1 text-sm" onClick={async () => {
                     const input = prompt('Rename list (enter new filename, without extension) or cancel');
                     if (!input) return;
                     const newName = input.endsWith('.json') ? input : `${input}.json`;
@@ -286,9 +286,9 @@ export default function Home() {
                       alert('Rename failed: ' + err);
                     }
                   }}>Rename</button>
-                  <button title="move up" className="px-2 py-1 border rounded" onClick={() => moveIndex(idx, -1)}>↑</button>
-                  <button title="move down" className="px-2 py-1 border rounded" onClick={() => moveIndex(idx, 1)}>↓</button>
-                  <button title="export" className="px-2 py-1 border rounded" onClick={async () => {
+                  <button title="move up" className="btn btn-ghost px-2 py-1 text-sm" onClick={() => moveIndex(idx, -1)}>↑</button>
+                  <button title="move down" className="btn btn-ghost px-2 py-1 text-sm" onClick={() => moveIndex(idx, 1)}>↓</button>
+                  <button title="export" className="btn btn-ghost px-2 py-1 text-sm" onClick={async () => {
                     try {
                       const res = await fetch(`/api/lists/${encodeURIComponent(l.filename)}?download=1`);
                       if (!res.ok) throw new Error('export failed');
@@ -305,7 +305,7 @@ export default function Home() {
                       alert('Export failed: ' + err);
                     }
                   }}>Export</button>
-                  <button title="delete" className="px-2 py-1 border rounded" onClick={async () => {
+                  <button title="delete" className="btn btn-ghost px-2 py-1 text-sm" onClick={async () => {
                     if (!confirm('Delete list ' + l.filename + '?')) return;
                     try {
                       const res = await fetch(`/api/lists/${encodeURIComponent(l.filename)}`, { method: 'DELETE' });
@@ -328,60 +328,68 @@ export default function Home() {
           </ul>
         </aside>
 
-        <section className="flex-1">
+            <section className="flex-1 pr-4 md:pr-0">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl">Food Combo Calculator</h1>
+            <h1 className="text-2xl font-semibold">Food Combo Calculator</h1>
           </div>
 
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex gap-3 items-center flex-wrap">
-              <select
-                className="p-2 border rounded"
-                value={brandFilter}
-                onChange={e => setBrandFilter(e.target.value)}
-              >
-                <option value="">All brands</option>
-                {[...new Set(combos.map(c => c.brand))].map(b => (
-                  <option key={b} value={b}>{b}</option>
-                ))}
-              </select>
-              <input
-                className="p-2 border rounded w-28"
-                type="number"
-                placeholder="Min price"
-                value={priceMin}
-                onChange={e => setPriceMin(e.target.value)}
-              />
-              <input
-                className="p-2 border rounded w-28"
-                type="number"
-                placeholder="Max price"
-                value={priceMax}
-                onChange={e => setPriceMax(e.target.value)}
-              />
-              <button className="px-2 py-1 border rounded" onClick={() => { setBrandFilter(""); setPriceMin(""); setPriceMax(""); }}>
-                Clear filters
-              </button>
+          <div className="mb-4">
+            <div className="md:flex md:items-center md:justify-between">
+              <div className="w-full md:w-auto">
+                <div className="flex gap-3 items-center flex-nowrap md:flex-wrap overflow-x-auto whitespace-nowrap">
+                <select
+                  className="p-2 border rounded bg-white flex-shrink-0 w-32 md:w-auto"
+                  value={brandFilter}
+                  onChange={e => setBrandFilter(e.target.value)}
+                >
+                  <option value="">All brands</option>
+                  {[...new Set(combos.map(c => c.brand))].map(b => (
+                    <option key={b} value={b}>{b}</option>
+                  ))}
+                </select>
+                <input
+                  className="p-2 border rounded w-28 bg-white"
+                  type="number"
+                  placeholder="Min price"
+                  value={priceMin}
+                  onChange={e => setPriceMin(e.target.value)}
+                />
+                <input
+                  className="p-2 border rounded w-28 bg-white"
+                  type="number"
+                  placeholder="Max price"
+                  value={priceMax}
+                  onChange={e => setPriceMax(e.target.value)}
+                />
+                <button className="btn btn-ghost hidden md:inline-flex ml-2" onClick={() => { setBrandFilter(""); setPriceMin(""); setPriceMax(""); }}>
+                  Clear filters
+                </button>
+              </div>
             </div>
-            <div className="flex-shrink-0 ml-4">
-              <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={openAdd}>Add combo</button>
+
+              <div className="w-full md:w-auto mt-2 md:mt-0 flex items-center justify-between md:justify-end gap-2">
+                <button className="btn btn-ghost md:hidden" onClick={() => { setBrandFilter(""); setPriceMin(""); setPriceMax(""); }}>
+                  Clear filters
+                </button>
+                <button className="btn btn-primary" onClick={openAdd}>Add combo</button>
+              </div>
             </div>
           </div>
 
           {lists.length > 0 && (
             <ul className="space-y-4">
               {displayCombos.map(({ combo, idx: origIdx }, displayIdx) => (
-                <li key={`${combo.name}-${combo.brand}-${origIdx}`} className="p-4 border rounded">
+                <li key={`${combo.name}-${combo.brand}-${origIdx}`} className="card">
                 <div className="font-semibold">{combo.name} — {combo.brand}</div>
                 <ul className="pl-5 list-disc">
                   {combo.items.map((ci, i) => (
                     <li key={`${ci.item.name}-${i}`}>{ci.qty} × {ci.item.name} = ${ci.getTotal().toFixed(2)}</li>
                   ))}
                 </ul>
-                <span className="font-bold"><div className="text-1xl mt-2">Price: ${combo.price.toFixed(2)} — Value: ${combo.calculateTotal().toFixed(2)} — Rating: {combo.getRating().toFixed(2)}</div></span>
+                <span className="font-bold"><div className="text-lg mt-2">Price: ${combo.price.toFixed(2)} — Value: ${combo.calculateTotal().toFixed(2)} — Rating: {combo.getRating().toFixed(2)}</div></span>
                 <div className="mt-2 flex gap-2">
-                  <button className="px-2 py-1 border rounded" onClick={() => openEdit(origIdx)}>Edit</button>
-                  <button className="px-2 py-1 border rounded" onClick={() => remove(origIdx)}>Delete</button>
+                  <button className="btn btn-ghost" onClick={() => openEdit(origIdx)}>Edit</button>
+                  <button className="btn btn-ghost" onClick={() => remove(origIdx)}>Delete</button>
                 </div>
               </li>
               ))}
@@ -390,21 +398,21 @@ export default function Home() {
 
           {open && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-              <div className="bg-white p-6 rounded w-full max-w-3xl mx-4 max-h-[90vh] overflow-auto">
+              <div className="modal w-full max-w-3xl mx-4 max-h-[90vh] overflow-auto">
                 <h3 className="text-lg font-semibold mb-2">{editingIndex === null ? "Add Combo" : "Edit Combo"}</h3>
-                <input className="w-full mb-2 p-2 border" value={name} onChange={e => setName(e.target.value)} placeholder="Name" />
-                <div className="mb-2">
-                  <input className="w-full p-2 border" value={brand} onChange={e => setBrand(e.target.value)} placeholder="Brand" />
-                </div>
-                <div className="mb-2">
-                  <input className="w-full p-2 border" type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="Price" />
-                </div>
+                  <input className="w-full mb-2 p-2 border rounded bg-white" value={name} onChange={e => setName(e.target.value)} placeholder="Name" />
+                  <div className="mb-2">
+                    <input className="w-full p-2 border rounded bg-white" value={brand} onChange={e => setBrand(e.target.value)} placeholder="Brand" />
+                  </div>
+                  <div className="mb-2">
+                    <input className="w-full p-2 border rounded bg-white" type="number" value={price} onChange={e => setPrice(e.target.value)} placeholder="Price" />
+                  </div>
 
                 <div className="mb-2 space-y-2">
                   {lineItems.map((li, idx) => (
                     <div key={idx} className="flex gap-2 items-center">
                       <select
-                        className="flex-1 p-2 border"
+                        className="flex-1 p-2 border rounded bg-white"
                         value={li.itemName}
                         onChange={e => {
                           const val = e.target.value;
@@ -421,19 +429,19 @@ export default function Home() {
                         ))}
                       </select>
                       <input
-                        className="w-20 p-2 border"
+                        className="w-20 p-2 border rounded bg-white"
                         type="number"
                         min={1}
                         value={li.qty}
                         onChange={e => setLineItems(prev => prev.map((p, i) => i === idx ? { ...p, qty: Number(e.target.value) } : p))}
                       />
-                      <button className="px-2 py-1 border rounded" onClick={() => setLineItems(prev => prev.filter((_, i) => i !== idx))}>Remove</button>
+                      <button className="btn btn-ghost" onClick={() => setLineItems(prev => prev.filter((_, i) => i !== idx))}>Remove</button>
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-2 justify-end">
-                  <button className="px-3 py-1 border rounded" onClick={() => setOpen(false)}>Cancel</button>
-                  <button className="px-3 py-1 bg-green-600 text-white rounded" onClick={save}>Save</button>
+                  <button className="btn btn-ghost" onClick={() => setOpen(false)}>Cancel</button>
+                  <button className="btn btn-success" onClick={save}>Save</button>
                 </div>
               </div>
             </div>
