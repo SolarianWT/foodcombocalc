@@ -1,0 +1,141 @@
+[
+  {
+    "name": "King's Choice Bundle",
+    "brand": "Burger King",
+    "price": 45.0,
+    "items": [
+      { "item": { "name": "Large Side", "value": 5.5 }, "qty": 2 },
+      { "item": { "name": "Large Drink", "value": 5 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 2 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 4 }
+    ]
+  },
+  {
+    "name": "BK Chicken Meal",
+    "brand": "Burger King",
+    "price": 19.0,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Whopper Deal",
+    "brand": "Burger King",
+    "price": 19.0,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "King's Choice Deal",
+    "brand": "Burger King",
+    "price": 15.0,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "BBQ Bacon Double Cheeseburger King Sampler",
+    "brand": "Burger King",
+    "price": 14.95,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Crispy Chicken King Sampler",
+    "brand": "Burger King",
+    "price": 12.95,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "WHOPPER Jr King Sampler",
+    "brand": "Burger King",
+    "price": 11.95,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Creamy Mayo Cheeseburger King Sampler",
+    "brand": "Burger King",
+    "price": 10.95,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "BBQ Rodeo King Sampler",
+    "brand": "Burger King",
+    "price": 10.95,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Family Fillup",
+    "brand": "Wendy's",
+    "price": 39.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 4 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 4 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 2 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "The Smash",
+    "brand": "Wendy's",
+    "price": 14.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "Deluxe Cheeseburger Value Combo",
+    "brand": "Wendy's",
+    "price": 7.9,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Crispy Chicken Value Combo",
+    "brand": "Wendy's",
+    "price": 7.4,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  }
+]
