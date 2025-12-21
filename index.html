@@ -1,4 +1,112 @@
-// classes
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Food Combo Calculator</title>
+  <style>
+  :root{--bg:#f7fafc;--fg:#0f172a;--card:#fff;--accent:#2563eb}
+*{box-sizing:border-box}
+
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+.container{display:flex;gap:1.25rem;padding:1.25rem;min-height:100vh}
+.sidebar{width:360px}
+.sidebar .sidebar-controls{display:flex;gap:.5rem;margin-bottom:1rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .75rem;border:1px solid #e6e7eb;background:#fff;border-radius:8px;cursor:pointer;font-weight:600}
+.btn.primary{background:var(--accent);color:#fff;border-color:transparent}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--fg)}
+.lists{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.75rem}
+.lists li{background:var(--card);padding:.75rem;border-radius:10px;border:1px solid #eef2ff;display:flex;align-items:center;gap:.5rem;box-shadow:0 1px 2px rgba(16,24,40,0.03)}
+.lists li div{font-weight:700;font-size:1rem}
+
+/* shorten names */
+.lists li > div:first-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.lists li > div:last-child{flex:0 0 auto;display:flex;gap:6px}
+.content{flex:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.topbar h1{font-size:1.5rem;margin:0}
+.filters{display:flex;gap:.5rem;align-items:center}
+.filters input,.filters select{padding:.5rem;border:1px solid #e6e7eb;border-radius:8px;background:#fff}
+.combos{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1rem}
+.combos li{background:var(--card);padding:1rem;border-radius:10px;border:1px solid #eef2ff;box-shadow:0 1px 4px rgba(2,6,23,0.04)}
+.combos li div{line-height:1.45;padding:0}
+.combos li .combo-title{margin:0 0 .5rem 0;font-size:1.125rem;font-weight:700}
+.combos li .info{color:#374151;font-weight:600;margin-top:.5rem}
+
+.combos li ul{padding-left:1rem;margin:0 0.5rem}
+.combos li ul li{background:transparent;border:0;padding:0;margin:0 0 0.25rem 0;list-style:disc}
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,0.5)}
+.modal.hidden{display:none}
+.modal-inner{background:var(--card);padding:1rem;border-radius:12px;width:min(780px,96%);max-height:88vh;overflow:auto;box-shadow:0 10px 30px rgba(2,6,23,0.25)}
+.modal-inner label{display:block;margin:.5rem 0;font-weight:700}
+.modal-inner input,.modal-inner select{width:100%;padding:.6rem;border:1px solid #e6e7eb;border-radius:10px;font-size:1rem}
+.modal-actions{display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem}
+.line-item{display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}
+.line-item input,.line-item select{padding:.5rem;border:1px solid #e6e7eb;border-radius:8px}
+.line-item .qty-input{font-weight:600}
+.small-btn{padding:.25rem .5rem;font-size:0.85rem}
+
+.item-select{min-width:220px}
+.qty-input{width:90px}
+.item-input{min-width:220px}
+
+.custom-select-popup { box-sizing: border-box; }
+
+.sidebar { background: var(--card); padding: 0.75rem; border-radius: 12px; border: 1px solid #eef2ff; box-shadow: 0 6px 18px rgba(2,6,23,0.06); }
+
+/* mobile */
+@media (max-width: 640px) {
+	.container { flex-direction: column; padding: 0.75rem; }
+	.sidebar { width: 100%; order: 0; margin-bottom: 0.75rem }
+	.content { order: 1; }
+	.topbar { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+	.filters { width: 100%; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+	.filters input, .filters select, .btn { width: auto; }
+	.modal-inner { width: 96%; padding: 0.75rem; }
+}  
+  </style>
+</head>
+<body>
+  <main class="container">
+    <aside class="sidebar">
+      <div class="sidebar-controls">
+        <label for="import-file" class="btn">Import list
+          <input id="import-file" type="file" accept="application/json" style="display:none" />
+        </label>
+        <label id="create-list" class="btn">Add list</label>
+      </div>
+      <ul id="lists" class="lists"></ul>
+    </aside>
+    <section class="content">
+      <header class="topbar">
+        <h1>Food Combo Calculator</h1>
+        <div class="filters">
+          <select id="brand-filter"></select>
+          <input id="price-min" type="number" placeholder="Min price" />
+          <input id="price-max" type="number" placeholder="Max price" />
+          <button id="clear-filters" class="btn">Clear</button>
+          <button id="open-add" class="btn primary">Add combo</button>
+        </div>
+      </header>
+
+      <ul id="combos" class="combos"></ul>
+    </section>
+  </main>
+  <div id="modal" class="modal hidden">
+      <div class="modal-inner">
+      <h2 id="modal-title">Add Combo</h2>
+      <label>Name <input id="c-name" /></label>
+      <label>Brand <input id="c-brand" /></label>
+      <label>Price <input id="c-price" type="number" step="0.01" /></label>
+      <div id="line-items"></div>
+      <div class="modal-actions">
+        <button id="save-combo" class="btn primary">Save</button>
+        <button id="cancel" class="btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // classes
 class Item {
   constructor(name, value) {
     this.name = name;
@@ -273,42 +381,33 @@ const cName = document.getElementById('c-name');
 const cBrand = document.getElementById('c-brand');
 const cPrice = document.getElementById('c-price');
 const lineItemsEl = document.getElementById('line-items');
-// add-line button removed from DOM (auto-add behavior)
-const addLineBtn = null;
+
 const saveComboBtn = document.getElementById('save-combo');
 const cancelBtn = document.getElementById('cancel');
-
-let editingIndex = null;
 
 function persistLists() { localStorage.setItem(KEY_LISTS, JSON.stringify(lists)); localStorage.setItem(KEY_ORDER, JSON.stringify(order)); }
 
 function loadLists() {
-  // rebuild lists from localStorage keys (simulate filesystem lists/*.json)
   order = JSON.parse(localStorage.getItem(KEY_ORDER) || '[]');
   const allKeys = Object.keys(localStorage).filter(k => k.startsWith('fcc_list_'));
   const files = allKeys.map(k => k.replace(/^fcc_list_/, ''))
     .filter(f => f.endsWith('.json') && !f.startsWith('_'));
-  // build displayName like the server: numeric filenames become "List N", else name without extension
   const built = files.map(f => {
     const m = f.match(/^(\d+)\.json$/);
     return { filename: f, displayName: m ? `List ${m[1]}` : f.replace(/\.json$/, '') };
   });
-  // if no lists exist, seed with baseList using server-like filename 1.json (or next free)
   if (built.length === 0) {
     lists = [];
     return;
   }
-  // apply saved order if present
   if (Array.isArray(order) && order.length > 0) {
     const map = new Map(built.map(l => [l.filename, l]));
     const ordered = order.map(f => map.get(f)).filter(Boolean);
     const remaining = built.filter(l => !order.includes(l.filename));
     const all = [...ordered, ...remaining];
-    // dedupe by filename preserving order
     const deduped = all.filter((v, i, a) => a.findIndex(x => x.filename === v.filename) === i);
     lists = deduped;
   } else {
-    // dedupe just in case
     const deduped = built.filter((v, i, a) => a.findIndex(x => x.filename === v.filename) === i);
     lists = deduped;
   }
@@ -323,7 +422,6 @@ function nextNumericFilename(existingFiles) {
 }
 
 function uniqueNameCandidate(orig, existingFiles) {
-  // if orig doesn't exist return orig, else append -N
   if (!existingFiles.includes(orig)) return orig;
   const m = orig.match(/^(.*?)(?:-(\d+))?(\.json)$/);
   const base = m ? m[1] : orig.replace(/\.json$/, '');
@@ -343,7 +441,6 @@ function saveSelectedList(updated) {
 }
 
 function createList() {
-  // mimic server: pick next numeric filename and ensure unique
   const existing = Object.keys(localStorage).filter(k => k.startsWith('fcc_list_')).map(k => k.replace(/^fcc_list_/, '')).filter(f => f.endsWith('.json') && !f.startsWith('_'));
   const filename = nextNumericFilename(existing);
   const safe = uniqueNameCandidate(filename, existing);
@@ -359,7 +456,6 @@ function importFile(file) {
   r.onload = function() {
     try {
       const content = JSON.parse(r.result);
-      // mimic server POST: choose next numeric filename and unique name
       const existing = Object.keys(localStorage).filter(k => k.startsWith('fcc_list_')).map(k => k.replace(/^fcc_list_/, '')).filter(f => f.endsWith('.json') && !f.startsWith('_'));
       const candidate = nextNumericFilename(existing);
       const safe = uniqueNameCandidate(candidate, existing);
@@ -394,7 +490,6 @@ function renameList(filename) {
   if (!input) return;
   const newName = input.endsWith('.json') ? input : input + '.json';
   const existing = Object.keys(localStorage).filter(k => k.startsWith('fcc_list_')).map(k => k.replace(/^fcc_list_/, ''));
-  // fail if target exists (server returns 409)
   if (existing.includes(newName)) return alert('Rename failed: Target already exists');
   const content = localStorage.getItem('fcc_list_' + filename);
   if (content == null) return alert('Source not found');
@@ -410,8 +505,6 @@ function moveIndex(i, dir) {
   const j = i + dir; if (j < 0 || j >= lists.length) return;
   const tmp = lists[i]; lists[i] = lists[j]; lists[j] = tmp;
   order = lists.map(l => l.filename); persistLists(); renderLists();
-  // mimic server reorder endpoint
-  // reorderLists simply persists order array
 }
 
 function reorderLists(newOrder) {
@@ -452,7 +545,6 @@ function makeSmall(text, onClick) { const b = document.createElement('button'); 
 
 function renderCombos() {
   combosEl.innerHTML = '';
-  // When there are no lists, do not display combos (match Next.js behavior)
   if (!Array.isArray(lists) || lists.length === 0) {
     return;
   }
@@ -460,11 +552,9 @@ function renderCombos() {
   const min = priceMinEl.value === '' ? -Infinity : Number(priceMinEl.value);
   const max = priceMaxEl.value === '' ? Infinity : Number(priceMaxEl.value);
   const display = combos.map((c, idx) => ({ combo: c, idx })).filter(({ combo }) => (brandFilter ? combo.brand.toLowerCase().includes(brandFilter.toLowerCase()) : true) && combo.price >= min && combo.price <= max).sort((a,b) => b.combo.getRating() - a.combo.getRating());
-  // fill brand options
   const brands = [...new Set(combos.map(c => c.brand))];
   brandFilterEl.innerHTML = ''; const optAll = document.createElement('option'); optAll.value = ''; optAll.textContent = 'All brands'; brandFilterEl.appendChild(optAll);
   brands.forEach(b => { const o = document.createElement('option'); o.value = b; o.textContent = b; brandFilterEl.appendChild(o); });
-
   display.forEach(({ combo, idx: origIdx }) => {
     const li = document.createElement('li');
     const title = document.createElement('div'); title.className = 'combo-title'; title.textContent = combo.name + ' — ' + combo.brand;
@@ -489,8 +579,6 @@ function openAdd() { editingIndex = null; modalTitle.textContent = 'Add Combo'; 
 
 function addLineItem(name='', qty=1) {
   const div = document.createElement('div'); div.className='line-item';
-  // item select or custom input
-  // custom dropdown that always opens downward
   const wrapper = document.createElement('div'); wrapper.className = 'custom-select'; wrapper.style.position = 'relative';
   const button = document.createElement('button'); button.type = 'button'; button.className = 'btn'; button.textContent = name || 'Select item'; button.style.minWidth = '220px';
   const popup = document.createElement('ul'); popup.className = 'custom-select-popup'; popup.style.position = 'absolute'; popup.style.left = '0'; popup.style.top = '100%'; popup.style.zIndex = '999'; popup.style.background = 'white'; popup.style.border = '1px solid #e6e7eb'; popup.style.borderRadius = '8px'; popup.style.padding = '6px 0'; popup.style.margin = '6px 0 0 0'; popup.style.listStyle = 'none'; popup.style.minWidth = '220px'; popup.style.maxHeight = '220px'; popup.style.overflow = 'auto'; popup.style.display = 'none';
@@ -499,14 +587,12 @@ function addLineItem(name='', qty=1) {
     const li = document.createElement('li'); li.textContent = label; li.className = 'custom-select-option'; li.style.padding = '6px 12px'; li.style.cursor = 'pointer'; li.onmouseenter = () => li.style.background = '#f3f4f6'; li.onmouseleave = () => li.style.background = '';
     li.onclick = () => {
       if (value === '__custom__') {
-        // replace select with text input
         const input = document.createElement('input'); input.type = 'text'; input.placeholder = 'Item name'; input.className = 'item-input';
         wrapper.replaceWith(inputWrapper(input, qtyI, del));
         input.focus();
       } else {
         button.textContent = value;
         wrapper.dataset.value = value;
-        // auto-add new blank line if this is the last row
         const last = lineItemsEl.lastElementChild === div;
         if (last) addLineItem('', 1);
       }
@@ -521,12 +607,10 @@ function addLineItem(name='', qty=1) {
     popup.appendChild(li);
   };
 
-  // empty option
   addOption('', '', undefined);
   STANDARD_ITEMS.forEach(si => addOption(si.name, si.name, si.value));
   addOption('Custom...', '__custom__', undefined);
 
-  // do not append popup inside wrapper to avoid clipping; show as portal appended to body
   let isOpen = false;
   button.onclick = (e) => {
     e.stopPropagation();
@@ -567,7 +651,6 @@ saveComboBtn.onclick = () => {
   const name = cName.value.trim(); const brand = cBrand.value.trim(); const price = Number(cPrice.value) || 0;
   const items = [];
   [...lineItemsEl.querySelectorAll('.line-item')].forEach(li => {
-    // item may be custom-select wrapper, item-input, or button (wrapped)
     const inputText = li.querySelector('input.item-input');
     const qtyInput = li.querySelector('input.qty-input');
     const btn = li.querySelector('button.btn');
@@ -589,17 +672,17 @@ brandFilterEl.onchange = renderCombos; priceMinEl.oninput = renderCombos; priceM
 createListBtn.onclick = createList; importFileInput.onchange = (e) => { const f = e.target.files[0]; if (f) importFile(f); e.target.value=''; };
 openAddBtn.onclick = openAdd;
 
-// init
 loadLists(); renderLists();
-// If there are no saved lists, start with nothing shown. If saved lists exist, select the first one and load it.
 if (!Array.isArray(lists) || lists.length === 0) {
   combos = [];
   selectedList = null;
 } else {
-  // select first list and load its combos so the initial view matches selecting List 1
   selectedList = lists[0].filename;
   const txt = localStorage.getItem('fcc_list_' + selectedList) || '[]';
   const parsed = JSON.parse(txt);
   combos = (parsed || []).map(c => new Combo(c.name, c.brand || '', Number(c.price) || 0, (c.items || []).map(it => new ComboItem(new Item(it.item?.name || it.name || '', it.item?.value || it.value || 0), Number(it.qty || 1)))));
 }
 renderCombos();
+  </script>
+</body>
+</html>

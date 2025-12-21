@@ -1,6 +1,0 @@
-{
-  "/api/lists/[name]/route": "app/api/lists/[name]/route.js",
-  "/api/lists/order/route": "app/api/lists/order/route.js",
-  "/api/lists/route": "app/api/lists/route.js",
-  "/page": "app/page.js"
-}
