@@ -141,7 +141,6 @@ const baseList = [
     "price": 6.0,
     "items": [
       { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
-      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
       { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
     ]
   },
