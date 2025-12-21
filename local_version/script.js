@@ -1,5 +1,4 @@
-// Local static version of Food Combo Calculator
-// Ported core classes
+// classes
 class Item {
   constructor(name, value) {
     this.name = name;
@@ -21,7 +20,7 @@ class Combo {
   getRating() { return (this.calculateTotal() - this.price) / this.price * 100; }
 }
 
-// Embedded default list (from data/baseList.json)
+// baselist
 const baseList = [
   {
     "name": "King's Choice Bundle",
@@ -32,17 +31,6 @@ const baseList = [
       { "item": { "name": "Large Drink", "value": 5 }, "qty": 1 },
       { "item": { "name": "Medium Burger", "value": 9 }, "qty": 2 },
       { "item": { "name": "Small Burger", "value": 5 }, "qty": 4 }
-    ]
-  },
-  {
-    "name": "BK Chicken Meal",
-    "brand": "Burger King",
-    "price": 19.0,
-    "items": [
-      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
-      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
-      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 },
-      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
     ]
   },
   {
@@ -67,47 +55,13 @@ const baseList = [
     ]
   },
   {
-    "name": "BBQ Bacon Double Cheeseburger King Sampler",
+    "name": "Whopper Regular Value Meal",
     "brand": "Burger King",
-    "price": 14.95,
+    "price": 14.75,
     "items": [
       { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
-      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
-      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
       { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 }
-    ]
-  },
-  {
-    "name": "Crispy Chicken King Sampler",
-    "brand": "Burger King",
-    "price": 12.95,
-    "items": [
-      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
-      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
-      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
-      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
-    ]
-  },
-  {
-    "name": "WHOPPER Jr King Sampler",
-    "brand": "Burger King",
-    "price": 11.95,
-    "items": [
-      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
-      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
-      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
-      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
-    ]
-  },
-  {
-    "name": "Creamy Mayo Cheeseburger King Sampler",
-    "brand": "Burger King",
-    "price": 10.95,
-    "items": [
-      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
-      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
-      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
-      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
     ]
   },
   {
@@ -143,13 +97,13 @@ const baseList = [
     ]
   },
   {
-    "name": "Deluxe Cheeseburger Value Combo",
+    "name": "Medium Baconator Combo",
     "brand": "Wendy's",
-    "price": 7.9,
+    "price": 20.4,
     "items": [
-      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
-      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
-      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Large Burger", "value": 14 }, "qty": 1 }
     ]
   },
   {
@@ -161,10 +115,122 @@ const baseList = [
       { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
       { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
     ]
-  }
+  },
+  {
+    "name": "Cheeseburger Value Combo",
+    "brand": "Wendy's",
+    "price": 6.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Cheeseburger Double Up",
+    "brand": "McDonald's",
+    "price": 10.5,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "Cheeseburger & Fries",
+    "brand": "McDonald's",
+    "price": 6.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Medium Big Mac Combo",
+    "brand": "McDonald's",
+    "price": 13.1,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Big Choice Deal",
+    "brand": "McDonald's",
+    "price": 25.0,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 4 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "Classics Share Meal",
+    "brand": "McDonald's",
+    "price": 37.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 2 },
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 2 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 2 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 3 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Feast for Two",
+    "brand": "KFC",
+    "price": 24.99,
+    "items": [
+      { "item": { "name": "Secret Recipe Chicken", "value": 5 }, "qty": 4 },
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 2 },
+      { "item": { "name": "Large Side", "value": 5.5 }, "qty": 2 },
+    ]
+  },
+  {
+    "name": "3pc Quarter Pack",
+    "brand": "KFC",
+    "price": 18.49,
+    "items": [
+      { "item": { "name": "Secret Recipe Chicken", "value": 5 }, "qty": 3 },
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 2 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Zinger Box Meal",
+    "brand": "KFC",
+    "price": 19.99,
+    "items": [
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 2 },
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 2 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Superstars Box",
+    "brand": "KFC",
+    "price": 14.99,
+    "items": [
+      { "item": { "name": "Secret Recipe Chicken", "value": 5 }, "qty": 1 },
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 2 },
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "20 Wicked Wings",
+    "brand": "KFC",
+    "price": 41.49,
+    "items": [
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 20 },
+    ]
+  },
 ];
 
-// Known standard items used when parsing freeform lines
+// items
 const STANDARD_ITEMS = [
   new Item('Small Side', 3.5),
   new Item('Medium Side', 4.5),
@@ -174,8 +240,10 @@ const STANDARD_ITEMS = [
   new Item('Large Drink', 5),
   new Item('Small Burger', 5),
   new Item('Medium Burger', 9),
-  new Item('Large Burger', 15),
-  new Item('Extra Large Burger', 20)
+  new Item('Large Burger', 14),
+  new Item('Extra Large Burger', 20),
+  new Item('Wicked Wing', 3),
+  new Item('Secret Recipe Chicken', 5)
 ];
 
 // Storage keys
