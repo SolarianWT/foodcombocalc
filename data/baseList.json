@@ -1,0 +1,208 @@
+[
+  {
+    "name": "King's Choice Bundle",
+    "brand": "Burger King",
+    "price": 45.0,
+    "items": [
+      { "item": { "name": "Large Side", "value": 5.5 }, "qty": 2 },
+      { "item": { "name": "Large Drink", "value": 5 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 2 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 4 }
+    ]
+  },
+  {
+    "name": "Whopper Deal",
+    "brand": "Burger King",
+    "price": 19.0,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "King's Choice Deal",
+    "brand": "Burger King",
+    "price": 15.0,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "Whopper Regular Value Meal",
+    "brand": "Burger King",
+    "price": 14.75,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "BBQ Rodeo King Sampler",
+    "brand": "Burger King",
+    "price": 10.95,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Family Fillup",
+    "brand": "Wendy's",
+    "price": 39.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 4 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 4 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 2 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "The Smash",
+    "brand": "Wendy's",
+    "price": 14.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "Medium Baconator Combo",
+    "brand": "Wendy's",
+    "price": 20.4,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Large Burger", "value": 14 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Crispy Chicken Value Combo",
+    "brand": "Wendy's",
+    "price": 7.4,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Cheeseburger Value Combo",
+    "brand": "Wendy's",
+    "price": 6.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Cheeseburger Double Up",
+    "brand": "McDonald's",
+    "price": 10.5,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "Cheeseburger & Fries",
+    "brand": "McDonald's",
+    "price": 6.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Medium Big Mac Combo",
+    "brand": "McDonald's",
+    "price": 13.1,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Big Choice Deal",
+    "brand": "McDonald's",
+    "price": 25.0,
+    "items": [
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 4 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "Classics Share Meal",
+    "brand": "McDonald's",
+    "price": 37.0,
+    "items": [
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 2 },
+      { "item": { "name": "Small Drink", "value": 3 }, "qty": 2 },
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 2 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 2 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 3 },
+      { "item": { "name": "Small Burger", "value": 5 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Feast for Two",
+    "brand": "KFC",
+    "price": 24.99,
+    "items": [
+      { "item": { "name": "Secret Recipe Chicken", "value": 5 }, "qty": 4 },
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 2 },
+      { "item": { "name": "Large Side", "value": 5.5 }, "qty": 2 }
+    ]
+  },
+  {
+    "name": "3pc Quarter Pack",
+    "brand": "KFC",
+    "price": 18.49,
+    "items": [
+      { "item": { "name": "Secret Recipe Chicken", "value": 5 }, "qty": 3 },
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 2 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Zinger Box Meal",
+    "brand": "KFC",
+    "price": 19.99,
+    "items": [
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 2 },
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 2 },
+      { "item": { "name": "Medium Burger", "value": 9 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "Superstars Box",
+    "brand": "KFC",
+    "price": 14.99,
+    "items": [
+      { "item": { "name": "Secret Recipe Chicken", "value": 5 }, "qty": 1 },
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 1 },
+      { "item": { "name": "Medium Side", "value": 4.5 }, "qty": 2 },
+      { "item": { "name": "Small Side", "value": 3.5 }, "qty": 1 },
+      { "item": { "name": "Medium Drink", "value": 4 }, "qty": 1 }
+    ]
+  },
+  {
+    "name": "20 Wicked Wings",
+    "brand": "KFC",
+    "price": 41.49,
+    "items": [
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 20 }
+    ]
+  }
+]

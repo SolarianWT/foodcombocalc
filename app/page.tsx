@@ -14,6 +14,8 @@ export default function Home() {
   const Mburger = new Item("Medium Burger", 9);
   const Lburger = new Item("Large Burger", 15);
   const XLburger = new Item("Extra Large Burger", 20);
+  const secret = new Item("Secret Recipe Chicken", 5);
+  const wicked = new Item("Wicked Wing", 3);
 
   function jsonToCombos(arr: any[]): Combo[] {
     return (arr || []).map(a => {
@@ -63,7 +65,7 @@ export default function Home() {
       .map(li => ({ itemName: (li.itemName || "").trim(), qty: li.qty }))
       .filter(li => li.itemName && !Number.isNaN(li.qty))
       .forEach(li => {
-        const found = [Sside, Sdrink, Mside, Mdrink, Lside, Ldrink, Sburger, Mburger, Lburger, XLburger].find(p => p.name === li.itemName);
+        const found = [Sside, Sdrink, Mside, Mdrink, Lside, Ldrink, Sburger, Mburger, Lburger, XLburger, secret, wicked].find(p => p.name === li.itemName);
         const item = found ? found : new Item(li.itemName, 0);
         arr.push(new ComboItem(item, li.qty));
       });
@@ -424,7 +426,7 @@ export default function Home() {
                         }}
                       >
                         <option value="">Select item</option>
-                        {[Sside, Sdrink, Mside, Mdrink, Lside, Ldrink, Sburger, Mburger, Lburger, XLburger].map(it => (
+                        {[Sside, Sdrink, Mside, Mdrink, Lside, Ldrink, Sburger, Mburger, Lburger, XLburger, secret, wicked].map(it => (
                           <option key={it.name} value={it.name}>{it.name} (${it.value})</option>
                         ))}
                       </select>
