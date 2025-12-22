@@ -183,7 +183,7 @@ const baseList = [
     "items": [
       { "item": { "name": "Secret Recipe Chicken", "value": 5 }, "qty": 4 },
       { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 2 },
-      { "item": { "name": "Large Side", "value": 5.5 }, "qty": 2 },
+      { "item": { "name": "Large Side", "value": 5.5 }, "qty": 2 }
     ]
   },
   {
@@ -224,9 +224,9 @@ const baseList = [
     "brand": "KFC",
     "price": 41.49,
     "items": [
-      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 20 },
+      { "item": { "name": "Wicked Wing", "value": 3 }, "qty": 20 }
     ]
-  },
+  }
 ];
 
 // items
