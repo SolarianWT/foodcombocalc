@@ -14,7 +14,11 @@ class ComboItem {
 }
 class Combo {
   constructor(name, brand = "", price = 0, items = []) {
-    this.name = name; this.brand = brand; this.price = price; this.items = items; this.score = this.getRating();
+    this.name = name; 
+    this.brand = brand; 
+    this.price = price; 
+    this.items = items; 
+    this.score = this.getRating();
   }
   calculateTotal() { return (this.items || []).reduce((s, ci) => s + (ci.getTotal ? ci.getTotal() : 0), 0); }
   getRating() { return (this.calculateTotal() - this.price) / this.price * 100; }
@@ -245,17 +249,14 @@ const STANDARD_ITEMS = [
   new Item('Secret Recipe Chicken', 5)
 ];
 
-// Storage keys
 const KEY_LISTS = 'fcc_lists';
 const KEY_ORDER = 'fcc_order';
 
-// App state
-let lists = []; // {filename, displayName}
+let lists = []; 
 let order = [];
 let selectedList = null;
 let combos = [];
 
-// DOM refs
 const listsEl = document.getElementById('lists');
 const combosEl = document.getElementById('combos');
 const brandFilterEl = document.getElementById('brand-filter');
@@ -276,7 +277,10 @@ const lineItemsEl = document.getElementById('line-items');
 const saveComboBtn = document.getElementById('save-combo');
 const cancelBtn = document.getElementById('cancel');
 
-function persistLists() { localStorage.setItem(KEY_LISTS, JSON.stringify(lists)); localStorage.setItem(KEY_ORDER, JSON.stringify(order)); }
+function persistLists() { 
+  localStorage.setItem(KEY_LISTS, JSON.stringify(lists)); 
+  localStorage.setItem(KEY_ORDER, JSON.stringify(order)); 
+}
 
 function loadLists() {
   order = JSON.parse(localStorage.getItem(KEY_ORDER) || '[]');
@@ -312,19 +316,6 @@ function nextNumericFilename(existingFiles) {
   return `${candidate}.json`;
 }
 
-function uniqueNameCandidate(orig, existingFiles) {
-  if (!existingFiles.includes(orig)) return orig;
-  const m = orig.match(/^(.*?)(?:-(\d+))?(\.json)$/);
-  const base = m ? m[1] : orig.replace(/\.json$/, '');
-  const ext = m ? m[3] : '.json';
-  let i = 1;
-  while (true) {
-    const name = `${base}-${i}${ext}`;
-    if (!existingFiles.includes(name)) return name;
-    i++;
-  }
-}
-
 function saveSelectedList(updated) {
   if (!selectedList) return;
   const payload = (typeof updated === 'undefined' ? combos : updated).map(c => ({ name: c.name, brand: c.brand, price: c.price, items: c.items.map(ci => ({ item: { name: ci.item.name, value: ci.item.value }, qty: ci.qty })) }));
@@ -334,9 +325,8 @@ function saveSelectedList(updated) {
 function createList() {
   const existing = Object.keys(localStorage).filter(k => k.startsWith('fcc_list_')).map(k => k.replace(/^fcc_list_/, '')).filter(f => f.endsWith('.json') && !f.startsWith('_'));
   const filename = nextNumericFilename(existing);
-  const safe = uniqueNameCandidate(filename, existing);
-  localStorage.setItem('fcc_list_' + safe, JSON.stringify(baseList, null, 2));
-  if (!order.includes(safe)) order.push(safe);
+  localStorage.setItem('fcc_list_' + filename, JSON.stringify(baseList, null, 2));
+  if (!order.includes(filename)) order.push(filename);
   persistLists();
   loadLists();
   renderLists();
@@ -348,10 +338,10 @@ function importFile(file) {
     try {
       const content = JSON.parse(r.result);
       const existing = Object.keys(localStorage).filter(k => k.startsWith('fcc_list_')).map(k => k.replace(/^fcc_list_/, '')).filter(f => f.endsWith('.json') && !f.startsWith('_'));
-      const candidate = nextNumericFilename(existing);
-      const safe = uniqueNameCandidate(candidate, existing);
-      localStorage.setItem('fcc_list_' + safe, JSON.stringify(content, null, 2));
-      if (!order.includes(safe)) order.push(safe);
+      const newName = input.endsWith('.json') ? input : input + '.json';
+      if (existing.includes(newName)) return alert('Rename failed: Target already exists');
+      localStorage.setItem('fcc_list_' + newName, JSON.stringify(content, null, 2));
+      if (!order.includes(newName)) order.push(newName);
       persistLists();
       loadLists();
       renderLists();
@@ -392,18 +382,10 @@ function renameList(filename) {
   persistLists(); loadLists(); renderLists();
 }
 
-function moveIndex(i, dir) {
+function moveList(i, dir) {
   const j = i + dir; if (j < 0 || j >= lists.length) return;
   const tmp = lists[i]; lists[i] = lists[j]; lists[j] = tmp;
   order = lists.map(l => l.filename); persistLists(); renderLists();
-}
-
-function reorderLists(newOrder) {
-  if (!Array.isArray(newOrder)) return;
-  order = newOrder.slice();
-  persistLists();
-  loadLists();
-  renderLists();
 }
 
 function selectList(filename) {
@@ -414,6 +396,66 @@ function selectList(filename) {
   renderLists(); renderCombos();
 }
 
+function openEdit(i) {
+  editingIndex = i; const c = combos[i]; modalTitle.textContent = 'Edit Combo'; cName.value = c.name; cBrand.value = c.brand; cPrice.value = c.price; lineItemsEl.innerHTML = '';
+  c.items.forEach(it => addLineItem(it.item.name, it.qty));
+  addLineItem('',1); modal.classList.remove('hidden');
+}
+
+function openAdd() { editingIndex = null; modalTitle.textContent = 'Add Combo'; cName.value=''; cBrand.value=''; cPrice.value=''; lineItemsEl.innerHTML=''; addLineItem('',1); modal.classList.remove('hidden'); }
+
+function addLineItem(name='', qty=1) {
+  const div = document.createElement('div'); div.className='line-item';
+  const wrapper = document.createElement('div'); wrapper.className = 'custom-select'; wrapper.style.position = 'relative';
+  const button = document.createElement('button'); button.type = 'button'; button.className = 'btn'; button.textContent = name || 'Select item'; button.style.minWidth = '220px';
+  const popup = document.createElement('ul'); popup.className = 'custom-select-popup'; popup.style.position = 'absolute'; popup.style.left = '0'; popup.style.top = '100%'; popup.style.zIndex = '999'; popup.style.background = 'white'; popup.style.border = '1px solid #e6e7eb'; popup.style.borderRadius = '8px'; popup.style.padding = '6px 0'; popup.style.margin = '6px 0 0 0'; popup.style.listStyle = 'none'; popup.style.minWidth = '220px'; popup.style.maxHeight = '220px'; popup.style.overflow = 'auto'; popup.style.display = 'none';
+
+  const addOption = (label, value, price) => {
+    const li = document.createElement('li'); li.textContent = label; li.className = 'custom-select-option'; li.style.padding = '6px 12px'; li.style.cursor = 'pointer'; li.onmouseenter = () => li.style.background = '#f3f4f6'; li.onmouseleave = () => li.style.background = '';
+    li.onclick = () => {
+      button.textContent = value;
+      wrapper.dataset.value = value;
+      const last = lineItemsEl.lastElementChild === div;
+      if (last) addLineItem('', 1);
+      popup.style.display = 'none';
+      if (popup.parentNode === document.body) popup.parentNode.removeChild(popup);
+      isOpen = false;
+    };
+    if (typeof price === 'number') {
+      const span = document.createElement('span'); span.style.float = 'right'; span.style.opacity = '0.8'; span.textContent = ` $${price.toFixed(2)}`;
+      li.appendChild(span);
+    }
+    popup.appendChild(li);
+  };
+  STANDARD_ITEMS.forEach(si => addOption(si.name, si.name, si.value));
+  let isOpen = false;
+  button.onclick = (e) => {
+    e.stopPropagation();
+    if (!isOpen) {
+      const rect = button.getBoundingClientRect();
+      popup.style.position = 'fixed';
+      popup.style.left = rect.left + 'px';
+      popup.style.top = rect.bottom + 'px';
+      popup.style.display = 'block';
+      document.body.appendChild(popup);
+      isOpen = true;
+    } else {
+      popup.style.display = 'none';
+      if (popup.parentNode === document.body) popup.parentNode.removeChild(popup);
+      isOpen = false;
+    }
+  };
+  document.addEventListener('click', () => { if (isOpen) { popup.style.display = 'none'; if (popup.parentNode === document.body) popup.parentNode.removeChild(popup); isOpen = false; } });
+
+  const qtyI = document.createElement('input'); qtyI.type='number'; qtyI.min = '0'; qtyI.className = 'qty-input'; qtyI.value = qty;
+  const del = document.createElement('button'); del.className='btn small-btn'; del.textContent='×'; del.onclick = () => div.remove();
+
+  wrapper.appendChild(button); wrapper.appendChild(popup);
+  div.appendChild(wrapper);
+  div.appendChild(qtyI); div.appendChild(del);
+  lineItemsEl.appendChild(div);
+}
+
 function renderLists() {
   listsEl.innerHTML = '';
   lists.forEach((l, idx) => {
@@ -421,8 +463,8 @@ function renderLists() {
     const name = document.createElement('div'); name.textContent = l.displayName; name.style.cursor = 'pointer'; name.onclick = () => selectList(l.filename);
     const actions = document.createElement('div'); actions.style.display = 'flex'; actions.style.gap = '4px';
     const renameBtn = makeSmall('Rename', () => renameList(l.filename));
-    const upBtn = makeSmall('↑', () => moveIndex(idx, -1));
-    const downBtn = makeSmall('↓', () => moveIndex(idx, 1));
+    const upBtn = makeSmall('↑', () => moveList(idx, -1));
+    const downBtn = makeSmall('↓', () => moveList(idx, 1));
     const exportBtn = makeSmall('Export', () => exportList(l.filename));
     const delBtn = makeSmall('Del', () => deleteList(l.filename));
     [renameBtn, upBtn, downBtn, exportBtn, delBtn].forEach(b => actions.appendChild(b));
@@ -431,8 +473,6 @@ function renderLists() {
     listsEl.appendChild(li);
   });
 }
-
-function makeSmall(text, onClick) { const b = document.createElement('button'); b.textContent = text; b.className = 'btn small-btn'; b.onclick = onClick; return b; }
 
 function renderCombos() {
   combosEl.innerHTML = '';
@@ -460,81 +500,7 @@ function renderCombos() {
   });
 }
 
-function openEdit(i) {
-  editingIndex = i; const c = combos[i]; modalTitle.textContent = 'Edit Combo'; cName.value = c.name; cBrand.value = c.brand; cPrice.value = c.price; lineItemsEl.innerHTML = '';
-  c.items.forEach(it => addLineItem(it.item.name, it.qty));
-  addLineItem('',1); modal.classList.remove('hidden');
-}
-
-function openAdd() { editingIndex = null; modalTitle.textContent = 'Add Combo'; cName.value=''; cBrand.value=''; cPrice.value=''; lineItemsEl.innerHTML=''; addLineItem('',1); modal.classList.remove('hidden'); }
-
-function addLineItem(name='', qty=1) {
-  const div = document.createElement('div'); div.className='line-item';
-  const wrapper = document.createElement('div'); wrapper.className = 'custom-select'; wrapper.style.position = 'relative';
-  const button = document.createElement('button'); button.type = 'button'; button.className = 'btn'; button.textContent = name || 'Select item'; button.style.minWidth = '220px';
-  const popup = document.createElement('ul'); popup.className = 'custom-select-popup'; popup.style.position = 'absolute'; popup.style.left = '0'; popup.style.top = '100%'; popup.style.zIndex = '999'; popup.style.background = 'white'; popup.style.border = '1px solid #e6e7eb'; popup.style.borderRadius = '8px'; popup.style.padding = '6px 0'; popup.style.margin = '6px 0 0 0'; popup.style.listStyle = 'none'; popup.style.minWidth = '220px'; popup.style.maxHeight = '220px'; popup.style.overflow = 'auto'; popup.style.display = 'none';
-
-  const addOption = (label, value, price) => {
-    const li = document.createElement('li'); li.textContent = label; li.className = 'custom-select-option'; li.style.padding = '6px 12px'; li.style.cursor = 'pointer'; li.onmouseenter = () => li.style.background = '#f3f4f6'; li.onmouseleave = () => li.style.background = '';
-    li.onclick = () => {
-      if (value === '__custom__') {
-        const input = document.createElement('input'); input.type = 'text'; input.placeholder = 'Item name'; input.className = 'item-input';
-        wrapper.replaceWith(inputWrapper(input, qtyI, del));
-        input.focus();
-      } else {
-        button.textContent = value;
-        wrapper.dataset.value = value;
-        const last = lineItemsEl.lastElementChild === div;
-        if (last) addLineItem('', 1);
-      }
-      popup.style.display = 'none';
-      if (popup.parentNode === document.body) popup.parentNode.removeChild(popup);
-      isOpen = false;
-    };
-    if (typeof price === 'number') {
-      const span = document.createElement('span'); span.style.float = 'right'; span.style.opacity = '0.8'; span.textContent = ` $${price.toFixed(2)}`;
-      li.appendChild(span);
-    }
-    popup.appendChild(li);
-  };
-
-  addOption('', '', undefined);
-  STANDARD_ITEMS.forEach(si => addOption(si.name, si.name, si.value));
-  addOption('Custom...', '__custom__', undefined);
-
-  let isOpen = false;
-  button.onclick = (e) => {
-    e.stopPropagation();
-    if (!isOpen) {
-      const rect = button.getBoundingClientRect();
-      popup.style.position = 'fixed';
-      popup.style.left = rect.left + 'px';
-      popup.style.top = rect.bottom + 'px';
-      popup.style.display = 'block';
-      document.body.appendChild(popup);
-      isOpen = true;
-    } else {
-      popup.style.display = 'none';
-      if (popup.parentNode === document.body) popup.parentNode.removeChild(popup);
-      isOpen = false;
-    }
-  };
-  document.addEventListener('click', () => { if (isOpen) { popup.style.display = 'none'; if (popup.parentNode === document.body) popup.parentNode.removeChild(popup); isOpen = false; } });
-
-  const qtyI = document.createElement('input'); qtyI.type='number'; qtyI.min = '0'; qtyI.className = 'qty-input'; qtyI.value = qty;
-  const del = document.createElement('button'); del.className='btn small-btn'; del.textContent='×'; del.onclick = () => div.remove();
-
-  wrapper.appendChild(button); wrapper.appendChild(popup);
-  div.appendChild(wrapper);
-  div.appendChild(qtyI); div.appendChild(del);
-  lineItemsEl.appendChild(div);
-
-  function inputWrapper(inputEl, qtyEl, delEl) {
-    const dd = document.createElement('div'); dd.className='line-item';
-    dd.appendChild(inputEl); dd.appendChild(qtyEl); dd.appendChild(delEl);
-    return dd;
-  }
-}
+function makeSmall(text, onClick) { const b = document.createElement('button'); b.textContent = text; b.className = 'btn small-btn'; b.onclick = onClick; return b; }
 
 cancelBtn.onclick = () => modal.classList.add('hidden');
 
