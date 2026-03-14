@@ -249,14 +249,15 @@ const STANDARD_ITEMS = [
   new Item('Secret Recipe Chicken', 5)
 ];
 
-const KEY_LISTS = 'fcc_lists';
-const KEY_ORDER = 'fcc_order';
+
 
 let lists = [];
 let order = [];
 let selectedList = null;
 let combos = [];
 
+const KEY_LISTS = 'fcc_lists';
+const KEY_ORDER = 'fcc_order';
 const listsEl = document.getElementById('lists');
 const combosEl = document.getElementById('combos');
 const brandFilterEl = document.getElementById('brand-filter');
@@ -337,15 +338,6 @@ function loadLists() {
   lists = result.filter((v, i, a) => a.findIndex(x => x.filename === v.filename) === i);
 }
 
-function nextNumericFilename() {
-  const existing = getListKeys();
-  const nums = existing.map(f => { const m = f.match(/^(\d+)\.json$/); return m ? Number(m[1]) : null; }).filter(n => n !== null);
-  const used = new Set(nums);
-  let candidate = 1;
-  while (used.has(candidate)) candidate++;
-  return `${candidate}.json`;
-}
-
 function saveSelectedList(updated) {
   if (!selectedList) return;
   const payload = (typeof updated === 'undefined' ? combos : updated).map(c => ({
@@ -356,6 +348,14 @@ function saveSelectedList(updated) {
 }
 
 // list
+function nextNumericFilename() {
+  const existing = getListKeys();
+  const nums = existing.map(f => { const m = f.match(/^(\d+)\.json$/); return m ? Number(m[1]) : null; }).filter(n => n !== null);
+  const used = new Set(nums);
+  let candidate = 1;
+  while (used.has(candidate)) candidate++;
+  return `${candidate}.json`;
+}
 
 function createList() {
   const filename = nextNumericFilename();
@@ -540,6 +540,33 @@ function addLineItem(name = '', qty = 1) {
   lineItemsEl.appendChild(div);
 }
 
+cancelBtn.onclick = () => modal.classList.add('hidden');
+
+saveComboBtn.onclick = () => {
+  const name = cName.value.trim();
+  const brand = cBrand.value.trim();
+  const price = Number(cPrice.value);
+  if (price <= 0) { alert('Invalid Price.'); return; }
+  const items = [];
+  [...lineItemsEl.querySelectorAll('.line-item')].forEach(li => {
+    const inputText = li.querySelector('input.item-input');
+    const qtyInput = li.querySelector('input.qty-input');
+    const btn = li.querySelector('button.btn');
+    const q = qtyInput ? Number(qtyInput.value) || 0 : 0;
+    let nm = '';
+    if (inputText) nm = inputText.value.trim();
+    else if (btn && btn.textContent && btn.textContent !== 'Select item') nm = btn.textContent.trim();
+    if (!nm) return;
+    const found = STANDARD_ITEMS.find(p => p.name === nm);
+    items.push(new ComboItem(found ? found : new Item(nm, 0), q));
+  });
+  const combo = new Combo(name, brand, price, items);
+  if (editingIndex === null) combos.push(combo); else combos[editingIndex] = combo;
+  modal.classList.add('hidden');
+  saveSelectedList();
+  renderCombos();
+};
+
 // render
 
 function renderLists() {
@@ -597,35 +624,6 @@ function renderCombos() {
 function makeSmall(text, onClick) {
   const b = document.createElement('button'); b.textContent = text; b.className = 'btn small-btn'; b.onclick = onClick; return b;
 }
-
-// event
-
-cancelBtn.onclick = () => modal.classList.add('hidden');
-
-saveComboBtn.onclick = () => {
-  const name = cName.value.trim();
-  const brand = cBrand.value.trim();
-  const price = Number(cPrice.value);
-  if (price <= 0) { alert('Invalid Price.'); return; }
-  const items = [];
-  [...lineItemsEl.querySelectorAll('.line-item')].forEach(li => {
-    const inputText = li.querySelector('input.item-input');
-    const qtyInput = li.querySelector('input.qty-input');
-    const btn = li.querySelector('button.btn');
-    const q = qtyInput ? Number(qtyInput.value) || 0 : 0;
-    let nm = '';
-    if (inputText) nm = inputText.value.trim();
-    else if (btn && btn.textContent && btn.textContent !== 'Select item') nm = btn.textContent.trim();
-    if (!nm) return;
-    const found = STANDARD_ITEMS.find(p => p.name === nm);
-    items.push(new ComboItem(found ? found : new Item(nm, 0), q));
-  });
-  const combo = new Combo(name, brand, price, items);
-  if (editingIndex === null) combos.push(combo); else combos[editingIndex] = combo;
-  modal.classList.add('hidden');
-  saveSelectedList();
-  renderCombos();
-};
 
 brandFilterEl.onchange = renderCombos;
 priceMinEl.oninput = renderCombos;
