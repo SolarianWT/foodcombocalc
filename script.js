@@ -233,6 +233,7 @@ const baseList = [
   }
 ];
 
+// items
 const STANDARD_ITEMS = [
   new Item('Small Side', 3.5),
   new Item('Medium Side', 4.5),
@@ -365,18 +366,38 @@ function createList() {
   renderLists();
 }
 
+function isValidComboList(data) {
+  if (!Array.isArray(data)) return false;
+  return data.every(c =>
+    c && typeof c.name === 'string' && c.name.trim() !== '' &&
+    typeof c.price === 'number' && c.price > 0 &&
+    Array.isArray(c.items)
+  );
+}
+
 function importFile(file) {
   const r = new FileReader();
   r.onload = function () {
     try {
       const content = JSON.parse(r.result);
-      const filename = nextNumericFilename();
+      if (!isValidComboList(content)) {
+        alert('Invalid JSON.');
+        return;
+      }
+      const baseName = file.name.replace(/\.json$/i, '');
+      let filename = baseName + '.json';
+      const existing = getListKeys();
+      if (existing.includes(filename)) {
+        let i = 2;
+        while (existing.includes(baseName + ' (' + i + ').json')) i++;
+        filename = baseName + ' (' + i + ').json';
+      }
       localStorage.setItem('fcc_list_' + filename, JSON.stringify(content, null, 2));
       if (!order.includes(filename)) order.push(filename);
       persistLists();
       loadLists();
       renderLists();
-    } catch (e) { alert('Invalid JSON'); }
+    } catch (e) { alert('Invalid JSON.'); }
   };
   r.readAsText(file);
 }
@@ -400,11 +421,11 @@ function deleteList(filename) {
 }
 
 function renameList(filename) {
-  const input = prompt('Rename list (enter new name, without extension) or cancel');
+  const input = prompt('Rename list.');
   if (!input) return;
   const newName = input.endsWith('.json') ? input : input + '.json';
   const existing = getListKeys();
-  if (existing.includes(newName)) return alert('Rename failed: Target already exists');
+  if (existing.includes(newName)) return alert('Name already exists.');
   const content = localStorage.getItem('fcc_list_' + filename);
   if (content == null) return alert('Source not found');
   localStorage.setItem('fcc_list_' + newName, content);
@@ -577,7 +598,7 @@ function makeSmall(text, onClick) {
   const b = document.createElement('button'); b.textContent = text; b.className = 'btn small-btn'; b.onclick = onClick; return b;
 }
 
-// event 
+// event
 
 cancelBtn.onclick = () => modal.classList.add('hidden');
 
@@ -585,7 +606,7 @@ saveComboBtn.onclick = () => {
   const name = cName.value.trim();
   const brand = cBrand.value.trim();
   const price = Number(cPrice.value);
-  if (price <= 0) { alert('Price must be greater than zero.'); return; }
+  if (price <= 0) { alert('Invalid Price.'); return; }
   const items = [];
   [...lineItemsEl.querySelectorAll('.line-item')].forEach(li => {
     const inputText = li.querySelector('input.item-input');
@@ -614,7 +635,7 @@ createListBtn.onclick = createList;
 importFileInput.onchange = (e) => { const f = e.target.files[0]; if (f) importFile(f); e.target.value = ''; };
 openAddBtn.onclick = openAdd;
 
-// initialising
+// ini
 
 loadLists();
 if (!Array.isArray(lists) || lists.length === 0) {
