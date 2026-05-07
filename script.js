@@ -1,4 +1,30 @@
-// Primarily edit the baselist and items at the top of this file if extending the project, to say other locations; the rest of the code will automatically adjust and doesn't require editing
+// classes
+class item {
+  constructor(name, value) {
+    this.name = name;
+    this.value = value;
+  }
+}
+class comboItem {
+  constructor(item, qty) {
+    this.item = item;
+    this.qty = qty;
+  }
+  getTotal() { return this.qty * (this.item.value || 0); }
+}
+class combo {
+  constructor(name, brand = "", price = 0, items = []) {
+    this.name = name;
+    this.brand = brand;
+    this.price = price;
+    this.items = items;
+    this.score = this.getRating();
+  }
+  calculateTotal() { return (this.items || []).reduce((s, ci) => s + (ci.getTotal ? ci.getTotal() : 0), 0); }
+  getRating() { return (this.calculateTotal() - this.price) / this.price * 100; }
+}
+
+// Primarily edit the baselist and items here if extending the project, to say other locations; the rest of the code will automatically adjust and doesn't require editing
 // baselist
 const baseList = [
   {
@@ -223,32 +249,6 @@ const standardItems = [
   new item('Wicked Wing', 3),
   new item('Secret Recipe Chicken', 5)
 ];
-
-// classes
-class item {
-  constructor(name, value) {
-    this.name = name;
-    this.value = value;
-  }
-}
-class comboItem {
-  constructor(item, qty) {
-    this.item = item;
-    this.qty = qty;
-  }
-  getTotal() { return this.qty * (this.item.value || 0); }
-}
-class combo {
-  constructor(name, brand = "", price = 0, items = []) {
-    this.name = name;
-    this.brand = brand;
-    this.price = price;
-    this.items = items;
-    this.score = this.getRating();
-  }
-  calculateTotal() { return (this.items || []).reduce((s, ci) => s + (ci.getTotal ? ci.getTotal() : 0), 0); }
-  getRating() { return (this.calculateTotal() - this.price) / this.price * 100; }
-}
 
 // app state
 let lists = [];
