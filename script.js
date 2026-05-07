@@ -1,29 +1,4 @@
-// classes
-class item {
-  constructor(name, value) {
-    this.name = name;
-    this.value = value;
-  }
-}
-class comboItem {
-  constructor(item, qty) {
-    this.item = item;
-    this.qty = qty;
-  }
-  getTotal() { return this.qty * (this.item.value || 0); }
-}
-class combo {
-  constructor(name, brand = "", price = 0, items = []) {
-    this.name = name;
-    this.brand = brand;
-    this.price = price;
-    this.items = items;
-    this.score = this.getRating();
-  }
-  calculateTotal() { return (this.items || []).reduce((s, ci) => s + (ci.getTotal ? ci.getTotal() : 0), 0); }
-  getRating() { return (this.calculateTotal() - this.price) / this.price * 100; }
-}
-
+// Primarily edit the baselist and items at the top of this file if extending the project, to say other locations; the rest of the code will automatically adjust and doesn't require editing
 // baselist
 const baseList = [
   {
@@ -249,13 +224,39 @@ const standardItems = [
   new item('Secret Recipe Chicken', 5)
 ];
 
+// classes
+class item {
+  constructor(name, value) {
+    this.name = name;
+    this.value = value;
+  }
+}
+class comboItem {
+  constructor(item, qty) {
+    this.item = item;
+    this.qty = qty;
+  }
+  getTotal() { return this.qty * (this.item.value || 0); }
+}
+class combo {
+  constructor(name, brand = "", price = 0, items = []) {
+    this.name = name;
+    this.brand = brand;
+    this.price = price;
+    this.items = items;
+    this.score = this.getRating();
+  }
+  calculateTotal() { return (this.items || []).reduce((s, ci) => s + (ci.getTotal ? ci.getTotal() : 0), 0); }
+  getRating() { return (this.calculateTotal() - this.price) / this.price * 100; }
+}
 
-
+// app state
 let lists = [];
 let order = [];
 let selectedList = null;
 let combos = [];
 
+// references
 const keyLists = 'fcc_lists';
 const keyOrder = 'fcc_order';
 const listsElement = document.getElementById('lists');
@@ -278,6 +279,7 @@ const lineItemsElement = document.getElementById('line-items');
 const saveComboButton = document.getElementById('save-combo');
 const cancelButton = document.getElementById('cancel');
 
+// helper functions
 function getKeys() {
   return Object.keys(localStorage)
     .filter(k => k.startsWith('fcc_list_'))
@@ -311,8 +313,7 @@ function updateFilter() {
   if (brands.includes(currentBrand)) brandFilterElement.value = currentBrand;
 }
 
-// storage
-
+// storage functions
 function saveLists() {
   localStorage.setItem(keyLists, JSON.stringify(lists));
   localStorage.setItem(keyOrder, JSON.stringify(order));
@@ -347,7 +348,7 @@ function saveSelectedList(updatedCombos) {
   localStorage.setItem('fcc_list_' + selectedList, JSON.stringify(payload));
 }
 
-// list
+// list management functions
 function getNextFilename() {
   const existing = getKeys();
   const numbers = existing.map(filename => { const match = filename.match(/^(\d+)\.json$/); return match ? Number(match[1]) : null; }).filter(number => number !== null);
@@ -453,8 +454,7 @@ function selectList(filename) {
   renderCombos();
 }
 
-// popup
-
+// combo modal functions
 function editCombo(index) {
   editingIndex = index;
   const combo = combos[index];
@@ -567,8 +567,7 @@ saveComboButton.onclick = () => {
   renderCombos();
 };
 
-// render
-
+// rendering functions
 function renderLists() {
   listsElement.innerHTML = '';
   lists.forEach((list, index) => {
@@ -633,8 +632,7 @@ createListButton.onclick = createList;
 importFileInput.onchange = (e) => { const file = e.target.files[0]; if (file) importFile(file); e.target.value = ''; };
 openAddButton.onclick = addCombo;
 
-// ini
-
+// initialization
 loadLists();
 if (!Array.isArray(lists) || lists.length === 0) {
   combos = [];
